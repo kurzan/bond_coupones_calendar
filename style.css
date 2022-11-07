@@ -1,0 +1,17 @@
+.coupone-table {
+  border: 1px solid;
+  border-radius: 6px;
+  width: 600px;
+}
+
+.coupone-table__list {
+
+}
+
+.old-coupones {
+  color: grey;
+}
+
+.hidden {
+  display: none;
+}
