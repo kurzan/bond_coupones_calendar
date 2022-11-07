@@ -12,6 +12,10 @@
   color: grey;
 }
 
+.feature-coupones {
+  color: red;
+}
+
 .hidden {
   display: none;
 }
