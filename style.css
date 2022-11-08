@@ -2,10 +2,13 @@
   border: 1px solid;
   border-radius: 6px;
   width: 600px;
+  text-align: left;
 }
 
-.coupone-table__list {
-
+.coupone-table__item {
+  text-align: left;
+  height: 40px;
+  border: black;
 }
 
 .old-coupones {
@@ -13,7 +16,13 @@
 }
 
 .feature-coupones {
-  color: red;
+  background-color: aliceblue;
+}
+
+
+.current_coupon_span {
+  color: grey;
+  font-size: 12px;
 }
 
 .hidden {
