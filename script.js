@@ -4,7 +4,7 @@ const bondTitle = document.querySelector('.bond_title');
 const bondTextCoupons = document.querySelector('.bond_text__coupons');
 const showAllCouponsButton = document.querySelector('.show-all-coupons');
 
-const isin = 'RU000A0ZZAT8';
+const isin = 'RU000A1013N6';
 const api_url = `https://iss.moex.com/iss/securities/${isin}/bondization.json?iss.json=extended&iss.meta=off&iss.only=coug=ru&limit=unlimited`;
 
 const today = new Date();
@@ -48,7 +48,7 @@ function oldCouponCalendar(item) {
 function currentCouponCalendar(item) {
   const calendar = document.createElement('tr');
   calendar.classList.add('coupone-table__item');
-  calendar.classList.add('feature-coupones');
+  calendar.classList.add('current-coupone');
   calendar.innerHTML = `
       <th>${dateToRus(item.coupondate)}</br><span class="current_coupon_span">Ближайшая выплата<span></th>
       <th>${item.value_rub}₽</th>
@@ -85,7 +85,6 @@ fetch(api_url)
     const bondName = coupons[0].name
 
     bondTitle.textContent = bondName;
-    
     console.log(coupons)
     //Кол-во купонов у облигации
     const allCoupones = coupons.length;
@@ -110,7 +109,7 @@ fetch(api_url)
 
     renderCalendar(filteredOLdCoupons, filteredFeautersCoupons);
     
-    bondTextCoupons.textContent = `Выплачено купонов: ${paysCoupons} из ${allCoupones}`;
+    bondTextCoupons.innerHTML = `Выплачено купонов: <span>${paysCoupons}</span> из <span>${allCoupones}</span>`;
 
     showAllCouponsButton.addEventListener('click', () => {
       tableBody.innerHTML = '';
