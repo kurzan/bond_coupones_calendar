@@ -57,23 +57,28 @@
 .current_coupon_span {
   color: grey;
   font-size: 12px;
+  font-weight: 500;
 }
 
 .hidden {
   display: none;
 }
 
-.show-all-coupons {
+.coupone-button {
   margin-top: 20px;
   margin-bottom: 20px;
   background-color: #fff;
   border: #fff;
   font-size: 24px;
-  color: #000033;
-  
+  color: #3366CC;
 }
 
-.show-all-coupons:hover {
+.show-prev-coupons {
+  font-size: 18px;;
+  margin-bottom: 0;
+}
+
+.coupone-button:hover {
   text-decoration: underline;
   cursor: pointer;
 }

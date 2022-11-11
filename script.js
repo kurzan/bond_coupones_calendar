@@ -2,9 +2,10 @@ const calendarWindget = document.querySelector('.coupone-calendar-widget');
 const tableBody = document.querySelector('.coupone-table__body');
 const bondTitle = document.querySelector('.bond_title');
 const bondTextCoupons = document.querySelector('.bond_text__coupons');
-const showAllCouponsButton = document.querySelector('.show-all-coupons');
+const showFeautersCouponsButton = document.querySelector('.show-feauters-coupons');
+const showPrevsCouponsButton = document.querySelector('.show-prev-coupons');
 
-const isin = 'RU000A1013N6';
+const isin = 'RU000A102LF6';
 const api_url = `https://iss.moex.com/iss/securities/${isin}/bondization.json?iss.json=extended&iss.meta=off&iss.only=coug=ru&limit=unlimited`;
 
 const today = new Date();
@@ -45,15 +46,14 @@ function oldCouponCalendar(item) {
   return calendar;
 }
 
-function currentCouponCalendar(item) {
+function currentCouponCalendar({coupondate, value_rub, valueprc}) {
   const calendar = document.createElement('tr');
   calendar.classList.add('coupone-table__item');
   calendar.classList.add('current-coupone');
   calendar.innerHTML = `
-      <th>${dateToRus(item.coupondate)}</br><span class="current_coupon_span">Ближайшая выплата<span></th>
-      <th>${item.value_rub}₽</th>
-      <th>${item.valueprc}%</th>
-      
+      <th>${dateToRus(coupondate)}</br><span class="current_coupon_span">Ближайшая выплата<span></th>
+      <th>${value_rub}₽</th>
+      <th>${valueprc}%</th>
 	`;
 
   return calendar;
@@ -82,10 +82,9 @@ fetch(api_url)
   .then(r => r.json())
   .then((data) => {
     const coupons = data[1].coupons;
-    const bondName = coupons[0].name
+    const bondName = coupons[0].name;
 
     bondTitle.textContent = bondName;
-    console.log(coupons)
     //Кол-во купонов у облигации
     const allCoupones = coupons.length;
 
@@ -107,18 +106,70 @@ fetch(api_url)
     const filteredOLdCoupons = oldCoupons.slice(-visible_old_coupons);
     const filteredFeautersCoupons = featureCoupons.slice(0, visible_feauters_coupons);
 
+    const prevCoupones = oldCoupons.length - filteredOLdCoupons.length ;
+    const nexCoupones = featureCoupons.length  - filteredFeautersCoupons.length ;
+
+    if (nexCoupones) {
+      showFeautersCouponsButton.innerHTML = `Еще ${nexCoupones} будущих выплат`;
+    }
+
+    if (prevCoupones) {
+      showPrevsCouponsButton.innerHTML = `Предыдущие ${prevCoupones} выплаты`;
+    }
+
     renderCalendar(filteredOLdCoupons, filteredFeautersCoupons);
     
     bondTextCoupons.innerHTML = `Выплачено купонов: <span>${paysCoupons}</span> из <span>${allCoupones}</span>`;
 
-    showAllCouponsButton.addEventListener('click', () => {
+    function onShowBtn (prevBtn, nextBtn, couponArr1, couponArr2) {
       tableBody.innerHTML = '';
-      renderCalendar(oldCoupons, featureCoupons);
+      renderCalendar(couponArr1, couponArr2);
+    
+      prevBtn.textContent = 'Свернуть';
+      nextBtn.textContent = '';
+    }
 
-      showAllCouponsButton.remove();
-    })
+    function onHideBtn () {
+      tableBody.innerHTML = '';
+      renderCalendar(filteredOLdCoupons, filteredFeautersCoupons);
+      showFeautersCouponsButton.innerHTML = `Еще ${nexCoupones} будущих выплат`;
+      showPrevsCouponsButton.innerHTML = `Предыдущие ${prevCoupones} выплаты`;
+    }
+
+    function showPrevCoupones() {
+      let right = false;
+
+      showPrevsCouponsButton.addEventListener('click', () => {
+        right = !right;
+
+        if (right) {
+          onShowBtn(showPrevsCouponsButton, showFeautersCouponsButton, oldCoupons, filteredFeautersCoupons)
+        } else {
+          onHideBtn();
+        }
+      })
+    }
+
+    function showNextCoupones() {
+      let right = false;
+
+      showFeautersCouponsButton.addEventListener('click', () => {
+        right = !right;
+        if (right) {
+          onShowBtn(showFeautersCouponsButton, showPrevsCouponsButton, filteredOLdCoupons, featureCoupons)
+        } else {
+          onHideBtn();
+        }
+      })
+    }
+
+    showPrevCoupones();
+    showNextCoupones();
+    
   })
   .catch(() => {
     removeWidget();
   })
   ;
+
+
