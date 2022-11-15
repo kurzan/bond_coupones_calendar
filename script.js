@@ -5,8 +5,15 @@ const bondTextCoupons = document.querySelector('.bond_text__coupons');
 const showFeautersCouponsButton = document.querySelector('.show-feauters-coupons');
 const showPrevsCouponsButton = document.querySelector('.show-prev-coupons');
 
-const isin = 'RU000A102LF6';
-const api_url = `https://iss.moex.com/iss/securities/${isin}/bondization.json?iss.json=extended&iss.meta=off&iss.only=coug=ru&limit=unlimited`;
+const bondButtinsList = document.querySelector('.bonds-buttons-list');
+
+const BONDS = {
+  pion1: 'RU000A0ZZAT8',
+  pion2: 'RU000A1006C3',
+  pion3: 'RU000A1013N6',
+  pion4: 'RU000A102LF6',
+  pion5: 'RU000A104V00',
+}
 
 const today = new Date();
 let visible_old_coupons = 3;
@@ -78,7 +85,9 @@ function removeWidget() {
 }
 
 
-fetch(api_url)
+
+function renderWidget (bond_code) {
+  fetch(`https://iss.moex.com/iss/securities/${bond_code}/bondization.json?iss.json=extended&iss.meta=off&iss.only=coug=ru&limit=unlimited`)
   .then(r => r.json())
   .then((data) => {
     const coupons = data[1].coupons;
@@ -132,8 +141,13 @@ fetch(api_url)
     function onHideBtn () {
       tableBody.innerHTML = '';
       renderCalendar(filteredOLdCoupons, filteredFeautersCoupons);
-      showFeautersCouponsButton.innerHTML = `Еще ${nexCoupones} будущих выплат`;
-      showPrevsCouponsButton.innerHTML = `Предыдущие ${prevCoupones} выплаты`;
+      if (nexCoupones) {
+        showFeautersCouponsButton.innerHTML = `Еще ${nexCoupones} будущих выплат`;
+      }
+  
+      if (prevCoupones) {
+        showPrevsCouponsButton.innerHTML = `Предыдущие ${prevCoupones} выплаты`;
+      }
     }
 
     function showPrevCoupones() {
@@ -172,4 +186,28 @@ fetch(api_url)
   })
   ;
 
+}
 
+
+
+renderWidget('RU000A0ZZAT8');
+
+function bondsFilter (evt) {
+  tableBody.innerHTML ='';
+  showFeautersCouponsButton.innerHTML ='';
+  showPrevsCouponsButton.innerHTML ='';
+  renderWidget(BONDS[evt.target.classList[1]]);
+}
+
+
+bondButtinsList.addEventListener('click', (evt) => {
+  let target = evt.target;
+  const activeLink = document.querySelector('.active_btn');
+
+  if (target.classList.contains('bond-button')) {
+    activeLink.classList.remove('active_btn');
+    target.classList.add('active_btn');
+    bondsFilter(evt);
+  }
+
+})

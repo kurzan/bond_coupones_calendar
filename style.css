@@ -1,6 +1,27 @@
 .container {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+}
+
+.pre-widget {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  max-width: 210px;
+  background-color: #fff;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 5px;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  font-size: 16px;
+}
+
+.pre-widget:hover {
+  padding: 7px 7px;
+  cursor: pointer;
 }
 
 .coupone-calendar-widget {
@@ -13,6 +34,31 @@
   text-align: left;
   background-color: white;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.bonds-buttons-list {
+  padding-top: 20px;
+  padding-left: 25px;
+  padding-right: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.bond-button {
+  border-radius: 16px;
+  border: 1px solid white;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.bond-button:hover {
+  border: 1px solid black;
+}
+
+.active_btn {
+  border: 1px solid black;
 }
 
 .bond_title {
@@ -82,3 +128,5 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+
